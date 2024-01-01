@@ -47,8 +47,10 @@ function HeaderAnchor(props) {
   return (
     <li>
       <Link
-        className={`text-white font-medium text-lg cursor-pointer hover:text-secondary transition-colors duration-200 ${
-          useLocation().pathname === props.path && "text-secondary"
+        className={`font-medium text-lg cursor-pointer hover:text-secondary transition-colors duration-200 ${
+          useLocation().pathname === props.path
+            ? "text-secondary"
+            : "text-white"
         }`}
         to={props.path}
       >
