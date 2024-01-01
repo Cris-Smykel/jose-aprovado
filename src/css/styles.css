@@ -18,3 +18,9 @@ html {
   box-sizing: border-box;
   box-shadow: none;
 }
+
+@layer components {
+  body {
+    @apply bg-gray-100;
+  }
+}
