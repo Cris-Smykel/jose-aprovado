@@ -1,5 +1,6 @@
 import LastDays from "./LastDays";
 import NewActivity from "./NewActivity";
+import MostUsed from "./MostUsed";
 
 export default function Hero() {
   return (
@@ -8,6 +9,8 @@ export default function Hero() {
         <LastDays />
 
         <NewActivity />
+
+        <MostUsed />
       </div>
     </section>
   );
