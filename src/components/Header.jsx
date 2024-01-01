@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 export default function Header() {
@@ -13,19 +13,19 @@ export default function Header() {
   const [showMobileNav, setShowMobileNav] = useState(() => false);
 
   return (
-    <header>
-      <div className="p-6 bg-blue-400 flex justify-end">
+    <header className="bg-primary">
+      <div className="p-6 flex justify-end md:justify-start md:max-w-6xl m-auto">
         <i
           onClick={() => handleHeaderBarsClick(setShowMobileNav, true)}
-          className="icon-bars text-white text-3xl cursor-pointer"
+          className="icon-bars text-white text-3xl cursor-pointer md:hidden"
         ></i>
 
         <nav
           className={`${
             showMobileNav ? "flex" : "hidden"
-          } fixed top-0 bottom-0 left-0 right-0 bg-primary justify-center items-center`}
+          } fixed top-0 bottom-0 left-0 right-0 bg-primary justify-center items-center md:block md:static`}
         >
-          <ul className="flex flex-col gap-4 relative">
+          <ul className="flex flex-col gap-6 relative md:flex-row">
             {headerAnchorsElement}
 
             <i
@@ -47,7 +47,9 @@ function HeaderAnchor(props) {
   return (
     <li>
       <Link
-        className="text-white font-medium text-lg cursor-pointer"
+        className={`text-white font-medium text-lg cursor-pointer hover:text-secondary transition-colors duration-200 ${
+          useLocation().pathname === props.path && "text-secondary"
+        }`}
         to={props.path}
       >
         {props.name}
