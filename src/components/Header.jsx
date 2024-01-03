@@ -44,13 +44,19 @@ function handleHeaderBarsClick(setShowMobileNav, value) {
 }
 
 function HeaderAnchor(props) {
+  let anchorActive = useLocation().pathname.startsWith(props.path);
+
+  if (useLocation().pathname !== "/") {
+    if (anchorActive && props.path === "/") {
+      anchorActive = false;
+    }
+  }
+
   return (
     <li>
       <Link
         className={`font-medium text-lg cursor-pointer hover:text-secondary transition-colors duration-200 ${
-          useLocation().pathname === props.path
-            ? "text-secondary"
-            : "text-white"
+          anchorActive ? "text-secondary" : "text-white"
         }`}
         to={props.path}
       >
@@ -74,8 +80,8 @@ function headerAnchorsData() {
     },
     {
       id: 3,
-      path: "/revisoes",
-      name: "Revisões",
+      path: "/materias",
+      name: "Matérias",
     },
     {
       id: 4,
