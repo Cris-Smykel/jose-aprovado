@@ -74,8 +74,8 @@ function headerAnchorsData() {
     },
     {
       id: 3,
-      path: "/revisoes",
-      name: "Revisões",
+      path: "/materias",
+      name: "Matérias",
     },
     {
       id: 4,
