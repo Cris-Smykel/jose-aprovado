@@ -19,6 +19,13 @@ html {
   box-shadow: none;
 }
 
+.bg-earth {
+  background: url("../assets/images/earth.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 @layer components {
   body {
     @apply bg-gray-200;

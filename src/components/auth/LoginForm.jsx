@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { sendRequest } from "../../util/util";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState(() => {
     return {
       userEmail: "",
       userPassword: "",
+      errorInfo: {
+        error: false,
+        msg: "",
+      },
     };
   });
 
   return (
     <form
-      onSubmit={(event) => handleSubmitLoginForm(event, loginForm)}
+      onSubmit={(event) =>
+        handleSubmitLoginForm(event, loginForm, setLoginForm, navigate)
+      }
       noValidate
       className="w-full max-w-96 flex flex-col gap-4"
     >
@@ -47,6 +56,12 @@ export default function LoginForm() {
           id="user-password"
           onChange={(event) => handleLoginInputChange(event, setLoginForm)}
         />
+
+        {loginForm.errorInfo.error && (
+          <p className="text-sm text-red-600 font-normal">
+            {loginForm.errorInfo.msg}
+          </p>
+        )}
       </div>
 
       <button
@@ -70,8 +85,32 @@ function handleLoginInputChange(event, setLoginForm) {
   });
 }
 
-function handleSubmitLoginForm(event, loginForm) {
+async function handleSubmitLoginForm(event, loginForm, setLoginForm, navigate) {
   event.preventDefault();
 
-  console.log("Login Submitted", loginForm);
+  try {
+    const requestData = {
+      method: "POST",
+      path: "http://localhost:5000/api/v1/user",
+      body: loginForm,
+    };
+
+    const responseData = await sendRequest(requestData);
+
+    if (!responseData.success) {
+      setLoginForm((prevLoginForm) => {
+        return {
+          ...prevLoginForm,
+          errorInfo: { error: true, msg: responseData.msg },
+        };
+      });
+      return;
+    }
+
+    return navigate("/");
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
 }
