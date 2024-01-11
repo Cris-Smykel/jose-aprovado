@@ -6,11 +6,13 @@ import CreateSubjects from "./pages/Subjects/CreateSubjects";
 import Planning from "./pages/Planning";
 import StudyCircle from "./pages/StudyCircle";
 import Supervision from "./pages/Supervision";
+import Login from "./pages/auth/Login";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/" element={<Home />} />
         <Route path="/atividades" element={<Activity />} />
         <Route path="/materias" element={<Subjects />} />
