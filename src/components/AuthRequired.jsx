@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export default function AuthRequired() {
   const requestData = {
     method: "GET",
-    path: "http://localhost:5000/api/v1/user/check-logged",
+    path: "/api/v1/user/check-logged",
   };
   const [isLogged, setIsLogged] = useState(() => null);
   useEffect(() => {

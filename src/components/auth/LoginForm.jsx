@@ -91,7 +91,7 @@ async function handleSubmitLoginForm(event, loginForm, setLoginForm, navigate) {
   try {
     const requestData = {
       method: "POST",
-      path: "http://localhost:5000/api/v1/user",
+      path: "/api/v1/user",
       body: loginForm,
     };
 

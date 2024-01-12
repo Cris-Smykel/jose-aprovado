@@ -2,7 +2,7 @@ export async function sendRequest(requestData) {
   const { method, path, body } = requestData;
 
   try {
-    const response = await fetch(path, {
+    const response = await fetch(`http://localhost:5000${path}`, {
       method,
       credentials: "include",
       headers: {

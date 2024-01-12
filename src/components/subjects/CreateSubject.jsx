@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { sendRequest } from "../../util/util";
 
 export default function CreateSubject() {
   const [subjectFormValues, setSubjectFormValues] = useState(() => {
     return {
-      subject: "",
+      subjectName: "",
+      errorInfo: {
+        error: false,
+        msg: "",
+      },
+      successInfo: {
+        success: true,
+        msg: "",
+      },
     };
   });
 
@@ -25,18 +34,32 @@ export default function CreateSubject() {
             </h1>
           </article>
 
-          <form onSubmit={(event) => handleSubmit(event, subjectFormValues)}>
+          <form
+            onSubmit={(event) =>
+              handleSubmit(event, subjectFormValues, setSubjectFormValues)
+            }
+          >
             <div className="flex flex-col gap-2 max-w-96">
               <input
                 onChange={(event) =>
                   getSubjectFormValues(event, setSubjectFormValues)
                 }
-                value={subjectFormValues.subject}
-                name="subject"
+                value={subjectFormValues.subjectName}
+                name="subjectName"
                 className="p-3 border border-[rgba(0,0,0,0.2)] rounded-lg font-normal text-base text-gray-600"
                 placeholder="Nome da matéria"
               />
 
+              {subjectFormValues.errorInfo.error && (
+                <p className="text-sm text-red-600 font-normal">
+                  {subjectFormValues.errorInfo.msg}
+                </p>
+              )}
+              {subjectFormValues.successInfo.success && (
+                <p className="text-sm text-green-600 font-normal">
+                  {subjectFormValues.successInfo.msg}
+                </p>
+              )}
               <button
                 className="p-2 mt-2 w-36 rounded-lg bg-primary text-white text-base hover:bg-blue-500 transition-all duration-200"
                 type="submit"
@@ -51,8 +74,69 @@ export default function CreateSubject() {
   );
 }
 
-function handleSubmit(event, subjectFormValues) {
+async function handleSubmit(event, subjectFormValues, setSubjectFormValues) {
   event.preventDefault();
+
+  const { subjectName } = subjectFormValues;
+
+  if (!subjectName) {
+    setSubjectFormValues((prevSubjectFormValues) => {
+      return {
+        ...prevSubjectFormValues,
+        errorInfo: {
+          error: true,
+          msg: "O nome é requerido.",
+        },
+        successInfo: {
+          success: false,
+          msg: "",
+        },
+      };
+    });
+
+    return;
+  }
+
+  const requestData = {
+    method: "POST",
+    path: "/api/v1/subjects",
+    body: subjectFormValues,
+  };
+
+  try {
+    const createResponse = await sendRequest(requestData);
+
+    setSubjectFormValues((prevSubjectFormValues) => {
+      if (createResponse.success) {
+        return {
+          successInfo: {
+            success: true,
+            msg: createResponse.msg,
+          },
+          errorInfo: {
+            error: false,
+            msg: "",
+          },
+          subjectName: "",
+        };
+      }
+
+      return {
+        ...prevSubjectFormValues,
+        successInfo: {
+          success: false,
+          msg: "",
+        },
+        errorInfo: {
+          error: true,
+          msg: createResponse.msg,
+        },
+      };
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 function getSubjectFormValues(event, setSubjectFormValues) {
